@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Home Page</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<! -- This script runs the python script when the button is clicked -->
+<script>
+    function runPy(){
+        $.ajax({
+            url:"/reset",
+            context: document.body});
+    }
+    function reset() {
+        runPy()
+        let timeleft = 60 * 3;
+        const btn = document.getElementById("btn")
+        btn.disabled = true;
+        btn.style.border = 'white';
+        btn.style.backgroundColor = 'white';
+        btn.style.color = 'red';
+        btn.textContent = '3:00'
+        let downloadTimer = setInterval(function () {
+            timeleft--;
+            let min = String(Math.floor(timeleft / 60));
+            let sec = String(Math.round((timeleft / 60 - min) * 60));
+            if (sec.length < 2){sec = "0" + sec};
+            btn.textContent = min + ':' + sec;
+            if (timeleft <= 0) {
+                clearInterval(downloadTimer);
+                document.getElementById("btn").textContent = "Reset";
+                btn.style.color = '';
+                btn.style.border = '';
+                btn.style.backgroundColor = '';
+                btn.disabled = false;
+            }
+        }, 1000);
+}
+</script>
+
+<button type="submit" id="btn" onclick='reset()'>Reset</button>
+
+</body>
+</html>
